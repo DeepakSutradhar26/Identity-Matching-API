@@ -15,4 +15,7 @@ model Contact{
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   deletedAt       DateTime?
+
+  primaryContact  Contact? @relation("ContactToContact", fields : [linkedId], references: [id])
+  secondaryContacts Contact[] @relation("ContactToContact")
 }
