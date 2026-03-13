@@ -12,6 +12,24 @@ describe("POST /identify", () => {
     });
 
     test("When email and phone number both are missing", async () => {
-        
+        const res = await request(app)
+        .post("/identify")
+        .send({});
+
+        expect(res.status).toBe(400);
+    });
+
+    test("Create new primary contact when their is none", async () => {
+        const res = await request(app)
+        .post("/identify")
+        .send({email : "adam@gmail.com", phoneNumber : "3345"});
+
+        const data = res.body.contact;
+
+        expect(res.status).toBe(200);
+        expect(data.primaryContactId).toBeDefined();
+        expect(data.emails).toContain("adam@gmail.com");
+        expect(data.phoneNumbers).toContain("3345");
+        expect(data.secondaryContactIds).toBe([]);
     });
 });
