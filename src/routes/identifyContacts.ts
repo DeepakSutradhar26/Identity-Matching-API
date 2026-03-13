@@ -1,4 +1,3 @@
-import { Contact } from "@prisma/client";
 import {prisma} from "../lib/prisma";
 import { Request, Response } from "express";
 
