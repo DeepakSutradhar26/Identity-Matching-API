@@ -7,6 +7,7 @@
     "strict": true,
     "esModuleInterop": true,
     "types" : ["node", "jest"],
+    "noImplicitAny": false
   },
   "include" : ["src", "__tests__"],
   "exclude": ["node_modules"]
