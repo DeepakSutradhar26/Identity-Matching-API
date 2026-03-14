@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "dotenv -e .env.test -- prisma migrate deploy && dotenv -e .env.test -- jest --detectOpenHandles",
+    "test": "prisma migrate deploy && jest --detectOpenHandles",
     "prepare": "husky",
     "dev": "nodemon src/server.ts"
   },
