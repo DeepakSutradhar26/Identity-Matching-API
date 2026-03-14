@@ -82,4 +82,61 @@ describe("POST /identify", () => {
         expect(data.phoneNumbers.length).toBe(1);
         expect(data.secondaryContactIds.length).toBe(1);
     });
+
+    test("When primary becomes secondary contact", async () => {
+        const primary = await prisma.contact.create({
+            data : {
+                email : "george@hillvalley.edu",
+                phoneNumber : "919191",
+                linkPrecedence : "primary",
+            }
+        });
+
+        const secondary = await prisma.contact.create({
+            data : {
+                email : "biffsucks@hillvalley.edu",
+                phoneNumber : "717171",
+                linkPrecedence : "primary",
+            }
+        });
+
+        const res = await request(app)
+        .post("/identify")
+        .send({
+            email : "george@hillvalley.edu",
+            phoneNumber : "717171",
+        });
+
+        const data = res.body.contact;
+
+        expect(res.status).toBe(200);
+        expect(data.primaryContactId).toBe(primary.id);
+        expect(data.emails.length).toBe(2);
+        expect(data.phoneNumbers.length).toBe(2);
+        expect(data.secondaryContactIds).toBe([secondary.id]);
+    });
+
+    test("Does not create duplicate contacts", async () => {
+        const primary = await prisma.contact.create({
+            data : {
+                email : "george@hillvalley.edu",
+                phoneNumber : "919191",
+                linkPrecedence : "primary",
+            }
+        });
+
+        const res = await request(app)
+        .post("/identify")
+        .send({
+            email : "george@hillvalley.edu",
+            phoneNumber : "919191",
+        });
+
+        const data = res.body.contact;
+
+        expect(res.status).toBe(200);
+        expect(data.primaryContactId).toBe(primary.id);
+        expect(data.emails.length).toBe(1);
+        expect(data.secondaryContactIds).toBe([]);
+    });
 });
