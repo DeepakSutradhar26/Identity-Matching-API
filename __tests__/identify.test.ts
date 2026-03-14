@@ -3,7 +3,7 @@ import app from "../src/app";
 import {prisma} from "../src/lib/prisma";
 
 describe("POST /identify", () => {
-    beforeAll(async () => {
+    beforeEach(async () => {
         await prisma.contact.deleteMany();
     });
 
@@ -30,10 +30,10 @@ describe("POST /identify", () => {
         expect(data.primaryContactId).toBeDefined();
         expect(data.emails).toContain("adam@gmail.com");
         expect(data.phoneNumbers).toContain("3345");
-        expect(data.secondaryContactIds).toBe([]);
+        expect(data.secondaryContactIds).toEqual([]);
     });
 
-    test("When either email is matching", async () => {
+    test("When only email is matching", async () => {
         const primary = await prisma.contact.create({
             data : {
                 email : "adam@gmail.com",
@@ -52,13 +52,13 @@ describe("POST /identify", () => {
         const data = res.body.contact;
 
         expect(res.status).toBe(200);
-        expect(data.primaryContactId).toBe(primary.id);
-        expect(data.emails.length).toBe(1);
-        expect(data.phoneNumbers.length).toBe(2);
-        expect(data.secondaryContactIds.length).toBe(1);
+        expect(data.primaryContactId).toEqual(primary.id);
+        expect(data.emails.length).toEqual(1);
+        expect(data.phoneNumbers.length).toEqual(2);
+        expect(data.secondaryContactIds.length).toEqual(1);
     });
 
-    test("When either phone number is matching", async () => {
+    test("When only phone number is matching", async () => {
         const primary = await prisma.contact.create({
             data : {
                 email : "adam@gmail.com",
@@ -77,7 +77,7 @@ describe("POST /identify", () => {
         const data = res.body.contact;
 
         expect(res.status).toBe(200);
-        expect(data.primaryContactId).toBe(primary.id);
+        expect(data.primaryContactId).toEqual(primary.id);
         expect(data.emails.length).toBe(2);
         expect(data.phoneNumbers.length).toBe(1);
         expect(data.secondaryContactIds.length).toBe(1);
@@ -113,7 +113,7 @@ describe("POST /identify", () => {
         expect(data.primaryContactId).toBe(primary.id);
         expect(data.emails.length).toBe(2);
         expect(data.phoneNumbers.length).toBe(2);
-        expect(data.secondaryContactIds).toBe([secondary.id]);
+        expect(data.secondaryContactIds).toEqual([secondary.id]);
     });
 
     test("Does not create duplicate contacts", async () => {
@@ -137,6 +137,6 @@ describe("POST /identify", () => {
         expect(res.status).toBe(200);
         expect(data.primaryContactId).toBe(primary.id);
         expect(data.emails.length).toBe(1);
-        expect(data.secondaryContactIds).toBe([]);
+        expect(data.secondaryContactIds).toEqual([]);
     });
 });
