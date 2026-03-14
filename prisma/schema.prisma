@@ -6,17 +6,12 @@ datasource db {
   provider = "postgresql"
 }
 
-enum Precedence {
-  primary
-  secondary
-}
-
-model Contact{
+model Contact {
   id            Int @id @default(autoincrement())
   phoneNumber   String?
   email         String?
   linkedId      Int?
-  linkPrecedence  Precedence
+  linkPrecedence  String
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   deletedAt       DateTime?
