@@ -18,7 +18,6 @@ POST /identify
 At least email or phone number must be present
 
 ### Response Format
-
 ```
 {
 "contact": {
@@ -45,3 +44,30 @@ Tests cover key scenarios such as:
 - Creating secondary contacts when new information is introduced
 - Resolving multiple primary contacts by keeping the oldest as primary
 - Validating the response structure and consolidated identity
+
+## Local Setup
+
+Clone the repository
+```
+https://github.com/DeepakSutradhar26/Identity-Matching-API.git
+```
+Install required packages
+```
+npm install
+```
+Generate prisma client
+```
+npx prisma generate
+```
+Create tables in database
+```
+npx prisma migrate deploy
+```
+Run automated test suite locally 
+```
+npm test
+```
+Run the server locally
+```
+npm run dev
+```
